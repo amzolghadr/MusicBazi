@@ -25,7 +25,12 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - uses: android-actions/setup-android@v3
+      # ubuntu-latest already ships the Android SDK (ANDROID_HOME), so we only
+      # accept licenses and let Gradle fetch any missing platform/build-tools.
+      - name: Accept Android SDK licenses
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
 
       - name: Install JS dependencies
         run: npm ci
