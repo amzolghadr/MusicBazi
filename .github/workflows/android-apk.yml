@@ -35,8 +35,12 @@ jobs:
       - name: Install JS dependencies
         run: npm ci
 
+      # Without VITE_API_MODE=http the web bundle defaults to the in-browser
+      # "demo" (mock) API and never talks to a real server.
       - name: Build web app and sync into Android project
         run: npm run android:sync
+        env:
+          VITE_API_MODE: http
 
       - name: Build debug APK
         working-directory: android
